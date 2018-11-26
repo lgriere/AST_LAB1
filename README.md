@@ -1,4 +1,7 @@
 # Asynchronous Server Technology - Labs
+
+[![Build Status](https://travis-ci.org/lgriere/AST_LAB1.svg?branch=master)](https://travis-ci.org/lgriere/AST_LAB1)
+
 ### Introduction
 This is a Node.js lab that returns a different content depending on the route parameters.
 
