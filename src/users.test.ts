@@ -1,69 +1,43 @@
+import { expect } from 'chai'
+import { User, UserHandler } from './users'
 import { LevelDB } from "./leveldb"
-import WriteStream from 'level-ws'
 
-export class User {
-  public username: string
-  public email: string
-  private password: string = ""
+const dbPath: string = 'db_test/users'
+var dbUser: UserHandler
 
-  constructor(username: string, email: string, password: string, passwordHashed: boolean = false) {
-    this.username = username
-    this.email = email
+describe('Users', function () {
+  before(function () {
+    LevelDB.clear(dbPath)
+    dbUser = new UserHandler(dbPath)
+  })
 
-    if (!passwordHashed) {
-      this.setPassword(password)
-    } else this.password = password
-  }
-  
-  static fromDb(username:string, value: any): User {
-    // Parse db result and return a User
-	const [password, email] = data.value.split(":")
-	return new User (username, email, password)
-  }
+  after(function () {
+    dbUser.db.close()
+  })
 
-  public setPassword(toSet: string): void {
-    // Hash and set password
-	// LOOK AT BCRYPT
-	this.password = toSet
-
-	}
-
-  public getPassword(): string {
-    return this.password
-  }
-
-  public validatePassword(toValidate: String): boolean {
-    // return comparison with hashed password
-	return this.password === toValidate
-  }
-}
-
-export class UserHandler {
-  public db: any
-
-  public get(username: string, callback: (err: Error | null, result?: User) => void) {
-    this.db.get(`user:${username}`, function (err: Error, data: any) {
-      if (err) throw callback(err)
-      callback(null, User.fromDb(data))
+  describe('#get', function () {
+    it('should get undefined on non existing User', function () {
+      // TODO
     })
-  }
+  })
 
-  public save(username: string, user: User, callback: (err: Error | null) => void) {
-    // TODO
-	this.db.put(
-		`user:${username}`,
-		`user.getPassword}:${user.password}`, (err: Error | null) => {
-		callback(err)
-		}
-	)
-  }
+  describe('#save', function () {
+    it('should save a User', function () {
+      // TODO
+    })
 
+    it('should update a User', function () {
+      // TODO
+    })
+  })
 
-  public delete(username: string, callback: (err: Error | null) => void) {
-    // TODO
-  }
+  describe('#delete', function () {
+    it('should delete a User', function () {
+      // TODO
+    })
 
-  constructor(path: string) {
-    this.db = LevelDB.open(path)
-  }
-}
+    it('should not fail if User does not exist', function () {
+      // TODO
+    })
+  })
+})

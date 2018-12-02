@@ -4,7 +4,7 @@
   "description": "ast labs ece course",
   "main": "index.js",
   "scripts": {
-    "test": "mkdir -p db_test && ./node_modules/.bin/mocha -r ts-node/register src/**/*.test.ts",
+    "test": "./node_modules/.bin/mocha -r ts-node/register src/**/*.test.ts",
     "build": "./node_modules/.bin/tsc -p tsconfig.json",
     "start": "./node_modules/.bin/ts-node src/server.ts",
     "dev": "./node_modules/.bin/nodemon ",
