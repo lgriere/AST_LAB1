@@ -53,8 +53,19 @@ export class MetricsHandler {
 
 
   public remove(key: string, callback: (error: Error | null) => void) {
-    const stream = WriteStream(this.db)
-    stream.write({ type: 'del', key: '1'})
+	const stream = this.db.createReadStream()
+	
+	stream.on('error', callback)
+    .on('end', (err:Error) =>{
+      callback(null)
+    })
+    .on('data', (data:any) => {
+      const [ , k, timestamp] = data.key.split(":")
+      if (key === k) {
+        this.db.del(data.key) 
+      }
+	  })
+	
   }
 
 }

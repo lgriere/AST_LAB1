@@ -68,8 +68,11 @@ describe('Metrics', function () {
   
     it('should delete data', function (done) {
 			dbMet.remove("2", (err: Error | null) => {
-				expect(err).to.be.undefined
+				expect(err).to.be.null
 				dbMet.get("2",(err: Error | null, result?: Metric[]) => {
+					expect(result).to.not.be.undefined
+					expect(result).to.be.an('array')
+					expect(result).to.be.empty
 				  done()
 				})
 			})
@@ -77,7 +80,7 @@ describe('Metrics', function () {
 
     it('should not fail if data does not exist', function (done) {
       dbMet.remove("3", (err: Error | null) => {
-				expect(err).to.be.undefined
+				expect(err).to.be.null
 				dbMet.get("3",(err: Error | null, result?: Metric[]) => {
 				  done()
 				})
