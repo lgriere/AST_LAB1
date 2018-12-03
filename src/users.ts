@@ -22,10 +22,9 @@ export class User {
 
   public setPassword(toSet: string): void {
     // Hash and set password
-	/*bcrypt.hash(toSet, saltRounds, function(err, hash) {
-		this.password = hash
-	});*/
-	this.password = toSet
+	this.password = bcrypt.hash(toSet, saltRounds, function(err, hash) {
+		return hash
+	});
 	}
 
   public getPassword(): string {
@@ -34,16 +33,10 @@ export class User {
 
   public validatePassword(toValidate: String): boolean {
     // return comparison with hashed password
-	/*bcrypt.compare(toValidate, getPassword, function(err, res) {
-		if(res) {
+	return bcrypt.compare(toValidate, this.password, function(err, res) {
 		// Passwords match
-			return this.password == res
-		} else {
-		// Passwords don't match
-		} 
-	});*/
-	return this.password == toValidate
-	
+			return res 
+	});
   }
   
    static fromDb(username:string, value: any): User {
