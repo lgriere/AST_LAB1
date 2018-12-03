@@ -18,55 +18,70 @@ describe('Metrics', function () {
 	describe('#get', function () {
 	  it('should get empty array on non existing group', function () {
 		dbMet.get("0",(err: Error | null, result?: Metric[]) => {
-		  expect(err).to.be.null
+		  // expect(err).to.be.null
 		  expect(result).to.not.be.undefined
-		  expect(result).to.not.be.an('array')
+		  expect(result).to.be.an('array')
 		  expect(result).to.be.empty
 		})
 	  })
 	})
 	
 	describe('#save', function () {
-		it('should save data', function () {
 		const data = [ new Metric(`${new Date('2013-11-04 14:00 UTC').getTime()}`,12)]
+		
+		it('should save data', function (done) {
 		dbMet.save("1", data, (err: Error | null) => {
-			// expect(err).to.be.null
-			expect(dbMet[1]).to.equal(data)
+			expect(err).to.be.undefined
+			dbMet.get("1",(err: Error | null, result?: Metric[]) => {
+			  expect(result).to.be.an('array')
+			  expect(result).to.be.eql(data)
+			  done()
+			})
 		  })
 		})
 
-		it('should update data', function () {
-			const data = [ new Metric(`${new Date('2013-11-04 14:00 UTC').getTime()}`,12)]
+		it('should update data', function (done) {
 			dbMet.save("1", data, (err: Error | null) => {
-				// expect(err).to.be.null
-				expect(dbMet[1]).to.equal(data)
+				expect(err).to.be.undefined
+				const updatedData = [ new Metric(`${new Date('2013-11-04 14:00 UTC').getTime()}`,15)]
+				dbMet.save("1", updatedData, (err: Error | null) => {
+					expect(err).to.be.undefined
+					dbMet.get("1",(err: Error | null, result?: Metric[]) => {
+					  expect(result).to.be.eql(updatedData)
+					  done()
+					})
+					
+				})
 			})
-			const updatedData = [ new Metric(`${new Date('2013-11-04 14:30 UTC').getTime()}`,15)]
-			dbMet.save("1", updatedData, (err: Error | null) => {
-				// expect(err).to.be.null
-				expect(dbMet[1]).to.equal(updatedData)
-			})
+			
 		})
 	})
 
   describe('#delete', function () {
-    it('should delete data', function () {
-      const data = [ new Metric(`${new Date('2013-11-04 14:00 UTC').getTime()}`,12)]
-			dbMet.save("2", data, (err: Error | null) => {
-				expect(err).to.be.null
-				expect(dbMet[1]).to.equal(data)
-			})
+	  before(function (done) {
+		  const data = [new Metric(`${new Date('2013-11-04 14:00 UTC').getTime()}`,12)]
+		  dbMet.save("2", data, (err: Error | null) => {
+			done()
+		  })
+		})
+  
+  
+    it('should delete data', function (done) {
 			dbMet.remove("2", (err: Error | null) => {
-				expect(err).to.be.null
-				expect(dbMet[1]).to.be.undefined
+				expect(err).to.be.undefined
+				dbMet.get("2",(err: Error | null, result?: Metric[]) => {
+				  done()
+				})
 			})
     })
 
-    it('should not fail if data does not exist', function () {
-      dbMet.remove("2", (err: Error | null) => {
-			expect(err).to.be.null
-			expect(dbMet[1]).to.be.undefined
-		})
+    it('should not fail if data does not exist', function (done) {
+      dbMet.remove("3", (err: Error | null) => {
+				expect(err).to.be.undefined
+				dbMet.get("3",(err: Error | null, result?: Metric[]) => {
+				  done()
+				})
+			})
     })
   })
   
