@@ -41,7 +41,7 @@ export class MetricsHandler {
     .on('data', (data:any) => {
       const [ , k, timestamp] = data.key.split(":")
       const value = data.value
-
+      console.log(data)
       if (key !== k) {
         console.log(`LevelDB error : ${data} does not match key ${key}`)
       }
@@ -54,7 +54,7 @@ export class MetricsHandler {
 
   public remove(key: string, callback: (error: Error | null) => void) {
 	const stream = this.db.createReadStream()
-	
+
 	stream.on('error', callback)
     .on('end', (err:Error) =>{
       callback(null)
@@ -62,10 +62,10 @@ export class MetricsHandler {
     .on('data', (data:any) => {
       const [ , k, timestamp] = data.key.split(":")
       if (key === k) {
-        this.db.del(data.key) 
+        this.db.del(data.key)
       }
 	  })
-	
+
   }
 
 }

@@ -6,6 +6,7 @@ import session = require('express-session')
 import levelSession = require('level-session-store')
 import { UserHandler, User } from './users'
 import path = require('path')
+var moment = require('moment');
 
 const LevelStore = levelSession(session)
 
@@ -132,11 +133,11 @@ app.use((req: any, res: any, next: any) => {
 })
 
 app.get('/', authCheck, (req: any, res: any) => {
-  res.render('index', { name: req.session.username })
+  res.render('index', { name: req.session.user.username })
 })
 
 app.get('/metrics.json', (req: any, res: any, next: any) => {
-  dbMet.get("0", (err: Error | null, result?: Metric[]) => {
+  dbMet.get(req.session.user.username, (err: Error | null, result?: Metric[]) => {
     if (err) next(err)
     if (result === undefined) {
       res.write('no result')
@@ -158,11 +159,11 @@ metricsRouter.use((req: any, res: any, next: any) => {
 })
 
 metricsRouter.get('/', (req: any, res: any) => {
-  res.render('add new Metric')
+  res.render('addMetric')
 })
 
 metricsRouter.get('/:id', (req: any, res: any,  next : any) => {
-  dbMet.get(req.params.id, (err: Error | null, result?: Metric[]) => {
+  dbMet.get(req.session.user.username, (err: Error | null, result?: Metric[]) => {
     if (err) next(err)
     if (result === undefined) {
       res.write('no result')
@@ -172,9 +173,9 @@ metricsRouter.get('/:id', (req: any, res: any,  next : any) => {
 })
 
 metricsRouter.post('/', (req: any, res: any, next: any) => {
-  dbMet.save(req.params.id, [req.body], (err: Error | null) => {
+  dbMet.save(req.session.user.username, [req.body], (err: Error | null) => {
     if (err) next(err)
-    res.status(200).send("Metric saved")
+    res.redirect('/')
   })
 })
 
