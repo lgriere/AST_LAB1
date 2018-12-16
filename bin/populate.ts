@@ -10,7 +10,7 @@ const met = [
 
 const db = new MetricsHandler('./db')
 
-dbMet.save(0, met, (err: Error | null) => {
+db.save("metrics", met, (err: Error | null) => {
   if (err) throw err
   console.log('Metrics saved')
 })

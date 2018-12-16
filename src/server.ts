@@ -70,56 +70,80 @@ authRouter.get('/logout', (req:any, res: any) => {
 
 app.use(authRouter)
 
-/* 
-	Users 
+/*
+	Users
 */
 
 const userRouter = express.Router()
 
-  userRouter.post('/', (req: any, res: any, next: any) => {
-	dbUser.get(req.body.username, (err: Error |null, result? :User) => {
-	if(!err || result !== undefined) {
-		res.status(409).send("user already exists")
-	}
-	else {
-		const { username, password, email } = req.body
-		const u = new User(username, password, email)
-		dbUser.save(u, (err: Error | null) => {
-		  if (err) next(err)
-		  res.satus(201).send("user saved")
-		})
-	}
-	})
+userRouter.get('/:username', (req: any, res: any, next: any) => {
+  dbUser.get(req.params.username, (err: Error | null, result?: User) => {
+    if(result === undefined || err ){
+      res.status(404).send("user not found")
+    }
+    else {
+      res.status(200).json(result)
+    }
   })
+})
 
-  userRouter.get('/:username', (req: any, res: any, next: any) => {
-    dbUser.get(req.params.username, (err: Error | null, result?: User) => {
-      if (err || result === undefined) {
-		res.status(404).send("user not found")
-	  } else {
-        res.status(200).json(result)
-      }
-    })
+userRouter.post('/', (req: any, res: any, next: any) => {
+  dbUser.get(req.body.username, (err: Error | null, result?: User) => {
+    if(result !== undefined || !err ){
+      res.status(409).send("user already exists")
+    } else {
+      const newUser = new User(req.body.username,req.body.email,req.body.password)
+      dbUser.save(newUser, (err: Error | null) => {
+        if (err) next(err)
+      })
+      res.redirect('/login')
+
+    }
   })
-  
-  userRouter.delete('/:username', function (req: any, res: any, next: any) {
-	  dbUser.get(req.params.username, function (err: Error | null) {
-		if (err) next(err)
-		res.status(200).send()
-	  })
-	})
+})
+
+userRouter.delete('/:username', (req: any, res: any, next: any) => {
+  dbUser.get(req.params.username, (err: Error | null, result?: User) => {
+    if(result === undefined || err ){
+      res.status(404).send("user not found")
+    } else {
+      dbUser.remove(req.params.username, (err: Error | null) => {
+        if (err) next(err)
+        res.status(201).send("user deleted")
+      })
+    }
+  })
+})
 
 app.use('/user', userRouter)
 
-const authCheck = function (req: any, res: any, next: any) {
+const authCheck = (req: any, res: any, next: any) => {
   if (req.session.loggedIn) {
     next()
   } else res.redirect('/login')
 }
 
+/*
+    Root
+*/
+app.use((req: any, res: any, next: any) => {
+  console.log(req.method + ' on ' + req.url)
+  next()
+})
 
 app.get('/', authCheck, (req: any, res: any) => {
   res.render('index', { name: req.session.username })
+})
+
+app.get('/metrics.json', (req: any, res: any, next: any) => {
+  dbMet.get("0", (err: Error | null, result?: Metric[]) => {
+    if (err) next(err)
+    if (result === undefined) {
+      res.write('no result')
+      res.send()
+    }
+    else res.json(result)
+  })
 })
 
 /*
@@ -128,9 +152,13 @@ app.get('/', authCheck, (req: any, res: any) => {
 
 const metricsRouter = express.Router()
 
-metricsRouter.use(function (req: any, res: any, next: any) {
+metricsRouter.use((req: any, res: any, next: any) => {
   console.log('metrics router: '  + req.method + ' on ' + req.url)
   next()
+})
+
+metricsRouter.get('/', (req: any, res: any) => {
+  res.render('add new Metric')
 })
 
 metricsRouter.get('/:id', (req: any, res: any,  next : any) => {
@@ -143,23 +171,23 @@ metricsRouter.get('/:id', (req: any, res: any,  next : any) => {
   })
 })
 
-metricsRouter.post('/:id', (req: any, res: any, next: any) => {
-  dbMet.save(req.params.id, req.body, (err: Error | null) => {
+metricsRouter.post('/', (req: any, res: any, next: any) => {
+  dbMet.save(req.params.id, [req.body], (err: Error | null) => {
     if (err) next(err)
-    res.status(200).send()
+    res.status(200).send("Metric saved")
   })
 })
 
 metricsRouter.delete('/:id', (req: any, res: any, next: any) => {
   dbMet.remove(req.params.id, (err: Error | null) => {
     if (err) next(err)
-    res.status(200).send()
+    res.status(200).send("Metric deleted")
   })
 })
 
 app.use('/metrics', authCheck, metricsRouter)
 
-/* 
+/*
 	Error handling
 */
 

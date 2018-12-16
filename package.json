@@ -23,11 +23,13 @@
   "dependencies": {
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
+    "bootstrap": "^3.4.0",
     "del": "^3.0.0",
     "ejs": "^2.6.1",
     "encoding-down": "^5.0.4",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
+    "jquery": "^3.3.1",
     "level": "^4.0.0",
     "level-session-store": "^2.1.0",
     "level-ws": "^1.0.0",
