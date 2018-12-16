@@ -6,28 +6,40 @@
 </head>
 
 <body class="container">
-  <div class="col-md-6.col-md-offset-3">
-    <div id="form">
-      <p>Please login to your account</p>
-      <hr/>
-      <form action="/login" method="post">
-        <div class="form-group">
-          <label for="form_username">Username</label>
-          <input id="form_username" type="text" name="username" />
+  <div class="col-md-6 col-md-offset-3">
+    <div class="panel panel-info">
+      <div class="panel-heading">Please login to your account</div>
+
+      <div class="panel-body">
+        <div id="form">
+          <form action="/login" method="post">
+            <div class="form-group">
+              <label for="form_username" class="control-label col-md-4">Username</label>
+              <div class="controls col-md-8 ">
+                  <input class="input-md form-control" type="text" id="form_username" name="username" placeholder="Enter username" style="margin-bottom: 10px" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="form_password" class="control-label col-md-4">Password</label>
+              <div class="controls col-md-8 ">
+                  <input class="input-md form-control" type="password" id="form_password" name="password" placeholder="Enter password" style="margin-bottom: 10px" />
+              </div>
+            </div>
+            <div class="row">
+             <div class="col-md-3 col-md-offset-5">
+               <button class="btn btn-primary btn-block" type="submit" value="Submit">Connect</button>
+             </div>
+           </div>
+          </form>
+          <hr/>
+          <p>Create an account ? <a href="/signup" onClick='document.location.href="/signup"'>Register here !</p>
+
         </div>
-        <div class="form-group">
-          <label for="form_password">Password</label>
-          <input id="form_password" type="password" name="password" />
-        </div>
-        <button class="btn btn-primary btn-block" type="submit" value="Submit">Connect</button>
-      </form>
-      <hr/>
-      <button class="btn btn-success btn-block" type="submit" href="/signup" onClick='document.location.href="/signup"'>
-        Create an account
-      </button>
+      </div>
     </div>
+  </div>
+
   </div>
 </body>
 
 </html>
-

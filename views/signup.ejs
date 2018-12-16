@@ -6,31 +6,45 @@
 </head>
 
 <body class="container">
-  <div class="col-md-6.col-md-offset-3">
-    <div id="form">
-      <p>Create your account</p>
-      <hr/>
-      <form action="/user/" method="post">
-        <div class="form-group">
-          <label for="form_username">Username</label>
-          <input id="form_username" type="text" name="username" />
-        </div>
-        <div class="form-group">
-          <label for="form_email">Email</label>
-          <input id="form_email" type="email" name="email" />
-        </div>
-        <div class="form-group">
-          <label for="form_password">Password</label>
-          <input id="form_password" type="password" name="password" />
-        </div>
-        <button class="btn btn-primary btn-block" type="submit" value="Submit">Create new account</button>
-      </form>
+  <div class="col-md-6 col-md-offset-3">
+    <div class="panel panel-info">
+      <div class="panel-heading">Create your account</div>
 
-      <hr/>
-      <button class="btn btn-success btn-block" type="submit" href="/login" onClick='document.location.href="/login"'>
-        Already have an account? Login
-      </button>
+      <div class="panel-body">
+        <div id="form">
+          <form action="/user/" method="post">
+            <div class="form-group">
+              <label for="form_username" class="control-label col-md-4">Username</label>
+              <div class="controls col-md-8 ">
+                  <input class="input-md form-control" type="text" id="form_username" name="username" placeholder="Enter username" style="margin-bottom: 10px" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="form_email" class="control-label col-md-4">Email</label>
+              <div class="controls col-md-8 ">
+                  <input class="input-md form-control" type="email" id="form_email" name="email" placeholder="Enter email address" style="margin-bottom: 10px" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="form_password" class="control-label col-md-4">Password</label>
+              <div class="controls col-md-8 ">
+                  <input class="input-md form-control" type="password" id="form_password" name="password" placeholder="Enter password" style="margin-bottom: 10px" />
+              </div>
+            </div>
+            <div class="row">
+             <div class="col-md-4 col-md-offset-4">
+               <button class="btn btn-primary btn-block" type="submit" value="Submit">Create new account</button>
+             </div>
+            </div>
+          </form>
+
+          <hr/>
+          <p>  Already have an account ? <a href="/login" onClick='document.location.href="/login"'>Login here !</p>
+        </div>
+      </div>
     </div>
+  </div>
+
   </div>
 </body>
 
