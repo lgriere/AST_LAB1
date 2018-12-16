@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <% include partials/head %>
+</head>
+
+<body class="container">
+  <div class="col-md-6 col-md-offset-3">
+    <div class="panel panel-info">
+      <div class="panel-heading">Delete metric</div>
+      <div class="panel-body">
+        <div id=form>
+         <form action="/metrics/delete" method="post">
+           <div class="row">
+             <div class="form-group">
+                <label for="form_timestamp" class="control-label col-md-4">Timestamp :</label>
+                <div class="controls col-md-8 ">
+                  <input class="input-md form-control" type="datetime-local" id="form_timestamp" name="timestamp" placeholder="Pick date" style="margin-bottom: 10px" />
+
+                  <%# <select class="form-control" id="select-metric" placeholder="Select timestamp">
+                  </select>
+                  </div>%>
+            </div>
+         </div>
+           <div class="row" style="padding-top:15px;">
+            <div class="col-md-3 col-md-offset-4">
+              <button class="btn btn-primary"  role="button" href="/"><span class="glyphicon glyphicon-arrow-left"></span> Go back</button>
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-success btn-block" type="submit" value="Submit"><span class="glyphicon glyphicon-ok"></span> Confirm</button>
+            </div>
+            </div>
+         </form>
+      </div>
+    </div>
+
+    </div>
+
+  </div>
+</body>
+
+</html>
+
+<script>
+  let dropdown = $('#select-metric');
+  dropdown.empty();
+
+  dropdown.append('<option selected="true" disabled>Select timestamp</option>');
+  dropdown.prop('selectedIndex', 0);
+
+  // Populate dropdown with list of timestamp
+  $.getJSON('/metrics.json', function (data) {
+    $.each(data, function (key, entry) {
+      dropdown.append($('<option></option>').attr('value', entry.value).text(entry.timestamp));
+    })
+  });
+</script>

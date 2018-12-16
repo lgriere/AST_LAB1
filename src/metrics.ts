@@ -52,7 +52,7 @@ export class MetricsHandler {
   }
 
 
-  public remove(key: string, callback: (error: Error | null) => void) {
+  public remove(key: string, timestamp:string, callback: (error: Error | null) => void) {
 	const stream = this.db.createReadStream()
 
 	stream.on('error', callback)
@@ -60,8 +60,10 @@ export class MetricsHandler {
       callback(null)
     })
     .on('data', (data:any) => {
-      const [ , k, timestamp] = data.key.split(":")
-      if (key === k) {
+      console.log(data)
+      const [ , k, timestp] = data.key.split(":")
+      if ((key === k) && (timestamp === timestp)) {
+        console.log(`LevelDB error : ${data} matches key ${key}, will be deleted`);
         this.db.del(data.key)
       }
 	  })

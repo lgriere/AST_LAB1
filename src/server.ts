@@ -6,7 +6,7 @@ import session = require('express-session')
 import levelSession = require('level-session-store')
 import { UserHandler, User } from './users'
 import path = require('path')
-var moment = require('moment');
+const moment = require('moment');
 
 const LevelStore = levelSession(session)
 
@@ -158,8 +158,12 @@ metricsRouter.use((req: any, res: any, next: any) => {
   next()
 })
 
-metricsRouter.get('/', (req: any, res: any) => {
+metricsRouter.get('/add', (req: any, res: any) => {
   res.render('addMetric')
+})
+
+metricsRouter.get('/delete', (req: any, res: any) => {
+  res.render('deleteMetric')
 })
 
 metricsRouter.get('/:id', (req: any, res: any,  next : any) => {
@@ -173,17 +177,18 @@ metricsRouter.get('/:id', (req: any, res: any,  next : any) => {
 })
 
 metricsRouter.post('/', (req: any, res: any, next: any) => {
+  req.body.timestamp = moment(req.body.timestamp).format("X");
   dbMet.save(req.session.user.username, [req.body], (err: Error | null) => {
     if (err) next(err)
-    res.redirect('/')
   })
+  res.redirect('../')
 })
-
-metricsRouter.delete('/:id', (req: any, res: any, next: any) => {
-  dbMet.remove(req.params.id, (err: Error | null) => {
+metricsRouter.post('/delete', (req:any, res:any, next: any) => {
+  req.body.timestamp = moment(req.body.timestamp).format("X");
+  dbMet.remove(req.session.user.username, req.body.timestamp, (err: Error | null) =>{
     if (err) next(err)
-    res.status(200).send("Metric deleted")
   })
+  res.redirect('../../')
 })
 
 app.use('/metrics', authCheck, metricsRouter)

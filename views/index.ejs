@@ -6,13 +6,13 @@
 </head>
 
 <body class="container">
-  
+
     <div class="jumbotron">
 			<h1 class="display-3">Hello <%= name %>!</h1>
       <h3>Welcome to your dashboard</h3>
 	   </div>
      <button class="btn btn-lg btn-success" id="show-metrics">Bring the metrics</button>
-     <button class="btn btn-lg btn-primary" href="/metrics/" onClick='document.location.href="/metrics/"'>Add metric</button>
+     <button class="btn btn-lg btn-primary" href="/metrics/add" onClick='document.location.href="/metrics/add"'>Add metric</button>
      <button class="btn btn-lg btn-danger" href="/metrics/delete" onClick='document.location.href="/metrics/delete"'>Delete metric</button>
 
     <div id="metrics"></div>
